@@ -5,7 +5,9 @@ Division and Mode taking operations. It is easy to use and install
 as it consists of a single header file. 
 
 ## Notes
-Currently it only does addition and multiplication. It only works with positive numbers.
+Currently it only does addition, subtraction and multiplication.
+Both negative and positive numbers can be used in multiplication. 
+Only use positive numbers on other arithmetic operations.
 
 ## Usage
 ```cpp
@@ -14,18 +16,23 @@ Currently it only does addition and multiplication. It only works with positive 
 
 int main(){
     std::string fNumber = "1419149194718947191345251418431974858637617198917470";
-    std::string sNumber = "4133149813182948192891748311313431974817198917471";
+    std::string sNumber = "4133149813182948192891748311313431974817198961784731";
     std::string resultNumber;
 
     lno::Addition(fNumber, sNumber, resultNumber);
     std::cout << "Addition: " << std::endl;
     std::cout << resultNumber;
-    // 1423282344532130139538143166743288290612434397834941
+    // 5552299007901895384236999729745406833454816160702201
     
     lno::Multiplication(fNumber, sNumber, resultNumber);
     std::cout << "\nMultiplication: " << std::endl;
     std::cout << resultNumber;
-    // 5865556229031347952083112353222631447227653185144863333713313615933541320937572314020027757070118370
+    // 5865556229031347952083112353222631447227653248032658997355360056412540804700547998450422790872375150570
+
+    lno::Subtraction(fNumber, sNumber, resultNumber);
+    std::cout << "\nSubtraction: " << std::endl;
+    std::cout << resultNumber;
+    // -2714000618464001001546496892881457116179581762867261
 
     return 0;
 }

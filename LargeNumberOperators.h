@@ -77,11 +77,128 @@ namespace lno{
 
     * Usage:
     * firstNumber, secondNumber and resultNumber data types (string)
+    * lno::Subtraction(firstNumber, secondNumber, resultNumber);
+    */
+    void Subtraction(std::string _fc, std::string _sc, std::string& _rc){
+        int _lf = _fc.length(), _ls = _sc.length(), _max;
+        
+        // String => Integer Pointer
+        // Resize and Clear
+        int* _f = (int*)malloc(sizeof(int) * _lf);
+        int* _s = (int*)malloc(sizeof(int) * _ls);
+        for(int i = 0;i < _lf; i++)
+            _f[i] = int(_fc[i]) - 48;
+        for(int i = 0;i < _ls; i++)
+            _s[i] = int(_sc[i]) - 48;
+        
+        // first > second _fs = 0
+        // first < seconf _fs = 1
+        int _fs = 0;
+        if(_lf > _ls){
+            _max = _lf;
+            _fs = 0;
+        }
+        else if(_lf == _ls){
+            _max = _ls;
+            for(int i = 0; i<_max; i++){
+                if(_f[i] > _s[i]){
+                    _fs = 0;
+                    break;
+                }else if(_f[i] < _s[i]){
+                    _fs = 1;
+                    break;
+                }
+            }
+        }else{
+            _max = _ls;
+            _fs = 1;
+        }
+
+        int* _r = (int*)malloc(sizeof(int) * _max);
+        for(int i = 0; i <= _max; i++)
+            _r[i] = 0;
+
+        // Math
+        int _z = 0, _k = 0, _residual = 0;
+        int _first, _second;
+        for(int i = _max-1 ;i >= 0 ;i--){
+            if(_ls-_z-1 >= 0){
+                _second = _s[_ls-_z-1];
+            }else{
+                _second = 0;
+            }
+            if(_lf-_z-1 >= 0){
+                _first = _f[_lf-_z-1];
+            }else{
+                _first = 0;
+            }
+            if(_fs == 0){
+                if(_first - _residual < _second){
+                    _k = 10 + _first - _second - _residual;
+                    _residual = 1;
+                }else{
+                    _k = _first - _second - _residual;
+                    _residual = 0;                   
+                }
+            }else{
+                if(_second - _residual < _first){
+                    _k = 10 + _second - _first - _residual;
+                    _residual = 1;
+                }else{
+                    _k = _second - _first - _residual;
+                    _residual = 0;                   
+                }                
+            }
+            _r[i] = abs(_k);
+            _z++;
+        }
+
+        /*
+        * Removes leading zeros.
+        */
+        int _remove = 0;
+        while (_r[_remove] == 0)
+            _remove++;
+
+        _rc = "";
+        if(_fs == 1)
+            _rc.append("-");
+        for(int i = _remove; i<_max ;i++)
+            _rc.append(std::to_string(_r[i]));
+
+        delete _f;
+        delete _s;
+        delete _r;
+    }
+
+    /** 
+    * _fc first number, _sc second number, _rc result number
+    * !!! The result number is resized inside the function and its content is classified.
+    * !!! The result number is returned.
+
+    * Usage:
+    * firstNumber, secondNumber and resultNumber data types (string)
     * lno::Multiplication(firstNumber, secondNumber, resultNumber);
     */
     void Multiplication(std::string _fc, std::string _sc, std::string& _rc){
         int _stage = 0, _residual = 0, _z = 0;
         int _lf = _fc.length(), _ls = _sc.length();
+
+        // Check for negative result
+        bool _negative = false;
+        if((_fc[0] == '-' && _sc[0] != '-') || (_fc[0] != '-' && _sc[0] == '-')){
+            _negative = true;
+        }
+        if(_fc[0] == '-'){
+            for(int i = 0;i < _lf-1; i++)
+                _fc[i] = _fc[i+1];
+            _lf --;
+        }
+        if(_sc[0] == '-'){
+            for(int i = 0;i < _ls-1; i++)
+                _sc[i] = _sc[i+1];
+            _ls --;
+        }
         int _max = _lf + _ls;
 
         // String => Integer Pointer
@@ -127,6 +244,7 @@ namespace lno{
         */
         if(_r[0] == 0){
             if(_r[1] == 0){
+                _negative = false;
                 _max = 1;
             }else{
                 for(int i = 0; i < _max - 1; i++){
@@ -137,6 +255,8 @@ namespace lno{
         }
         _rc = "";
         for(int i = 0; i<_max ;i++){
+            if(_negative && i == 0)
+                _rc.append("-");
             _rc.append(std::to_string(_r[i]));
         }
         delete _f;
