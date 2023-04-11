@@ -17,56 +17,74 @@ namespace lno{
     void Addition(std::string _fc, std::string _sc, std::string& _rc){
         int _lf = _fc.length(), _ls = _sc.length(), _max;
 
-        // _max lenght => 999 (3 lenght) + 9999 (4 lenght) = 10998 **(4+1 lenght)**
-        if(_lf > _ls)
-            _max = _lf+1;
-        else
-            _max = _ls+1;
-
-        // String => Integer Pointer
-        // Resize and Clear
-        int* _f = (int*)malloc(sizeof(int) * _lf);
-        int* _s = (int*)malloc(sizeof(int) * _ls);
-        int* _r = (int*)malloc(sizeof(int) * _max);
-        for(int i = 0; i <= _max; i++)
-            _r[i] = 0;
-        for(int i = 0;i < _lf; i++)
-            _f[i] = int(_fc[i]) - 48;
-        for(int i = 0;i < _ls; i++)
-            _s[i] = int(_sc[i]) - 48;
-
-        /*
-        * Integer pointers are used in the operations here.
-        */
-        int _z = 0, _k = 0, _residual = 0;
-        for(int i = _max-1 ;i >= 0 ;i--){
-            _k = _residual;
-            if(_z <_lf){
-                _k += _f[_lf-_z-1];
+        // Check for negative result
+        bool _negative = false;
+        // -,- || +,+
+        if((_fc[0] == '-' && _sc[0] == '-') || (_fc[0] != '-' && _sc[0] != '-')){
+            if(_fc[0] == '-' && _sc[0] == '-'){
+                _negative = true;
+                _fc[0] = '0';
+                _sc[0] = '0';
             }
-            if(_z < _ls){
-                _k += _s[_ls-_z-1];
-            }
-            _r[i] = _k%10;
-            _residual = _k/10;
+                
+            // _max lenght => 999 (3 lenght) + 9999 (4 lenght) = 10998 **(4+1 lenght)**
+            if(_lf > _ls)
+                _max = _lf+1;
+            else
+                _max = _ls+1;
 
-            _z++;
+            // String => Integer Pointer
+            // Resize and Clear
+            int* _f = (int*)malloc(sizeof(int) * _lf);
+            int* _s = (int*)malloc(sizeof(int) * _ls);
+            int* _r = (int*)malloc(sizeof(int) * _max);
+            for(int i = 0; i <= _max; i++)
+                _r[i] = 0;
+            for(int i = 0;i < _lf; i++)
+                _f[i] = int(_fc[i]) - 48;
+            for(int i = 0;i < _ls; i++)
+                _s[i] = int(_sc[i]) - 48;
+
+            /*
+            * Integer pointers are used in the operations here.
+            */
+            int _z = 0, _k = 0, _residual = 0;
+            for(int i = _max-1 ;i >= 0 ;i--){
+                _k = _residual;
+                if(_z <_lf){
+                    _k += _f[_lf-_z-1];
+                }
+                if(_z < _ls){
+                    _k += _s[_ls-_z-1];
+                }
+                _r[i] = _k%10;
+                _residual = _k/10;
+
+                _z++;
+            }
+            /*
+            * Removes leading zeros.
+            */
+            if(_r[0] == 0){
+                for(int i = 0; i < _max - 1; i++)
+                    _r[i] = _r[i+1];
+                _max --;
+                if(_r[0] == 0){
+                    for(int i = 0; i < _max - 1; i++)
+                        _r[i] = _r[i+1];
+                    _max --;
+                }
+            }
+            _rc = "";
+            if(_negative)
+                _rc.append("-");
+            for(int i = 0; i<_max ;i++){
+                _rc.append(std::to_string(_r[i]));
+            }
+            delete _f;
+            delete _s;
+            delete _r;
         }
-        /*
-        * Removes leading zeros.
-        */
-        if(_r[0] == 0){
-            for(int i = 0; i < _max - 1; i++)
-                _r[i] = _r[i+1];
-            _max --;
-        }
-        _rc = "";
-        for(int i = 0; i<_max ;i++){
-            _rc.append(std::to_string(_r[i]));
-        }
-        delete _f;
-        delete _s;
-        delete _r;
     }
 
     /** 
