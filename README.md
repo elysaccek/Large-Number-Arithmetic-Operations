@@ -5,7 +5,7 @@ Division and Mode taking operations. It is easy to use and install
 as it consists of a single header file. 
 
 ## Notes
-Currently it only does addition, subtraction and multiplication.
+Currently it only does addition, subtraction, multiplication and division.
 
 ## Usage
 ```cpp
@@ -13,8 +13,8 @@ Currently it only does addition, subtraction and multiplication.
 #include "LargeNumberOperators.h"
 
 int main(){
-    std::string fNumber = "1419149194718947191345251418431974858637617198917470";
-    std::string sNumber = "4133149813182948192891748311313431974817198961784731";
+    std::string fNumber = "4133149813182948192891748311313431974817198961784731";
+    std::string sNumber = "1419149194718947191345251418431974858637617198917470";
     std::string resultNumber;
 
     lno::Addition(fNumber, sNumber, resultNumber);
@@ -25,12 +25,17 @@ int main(){
     lno::Subtraction(fNumber, sNumber, resultNumber);
     std::cout << "\nSubtraction: " << std::endl;
     std::cout << resultNumber;
-    // -2714000618464001001546496892881457116179581762867261
+    // 2714000618464001001546496892881457116179581762867261
     
     lno::Multiplication(fNumber, sNumber, resultNumber);
     std::cout << "\nMultiplication: " << std::endl;
     std::cout << resultNumber;
     // 5865556229031347952083112353222631447227653248032658997355360056412540804700547998450422790872375150570
+
+    lno::Division(fNumber,sNumber,resultNumber);
+    std::cout << "\nDivision: " << std::endl;
+    std::cout << resultNumber;
+    // 2
 
     return 0;
 }
@@ -44,14 +49,14 @@ int main(){
     /*
     ==> It is sufficient to have a "-" sign at the beginning of the number
     */
-    std::string fNumber = "-1419149194718947191345251418431974858637617198917470";
-    std::string sNumber = "4133149813182948192891748311313431974817198961784731";
+    std::string fNumber = "-4133149813182948192891748311313431974817198961784731";
+    std::string sNumber = "1419149194718947191345251418431974858637617198917470";
     std::string resultNumber;
 
     lno::Addition(fNumber, sNumber, resultNumber);
     std::cout << "Addition: " << std::endl;
     std::cout << resultNumber;
-    // 2714000618464001001546496892881457116179581762867261
+    // -2714000618464001001546496892881457116179581762867261
 
     lno::Subtraction(fNumber, sNumber, resultNumber);
     std::cout << "\nSubtraction: " << std::endl;
@@ -62,6 +67,11 @@ int main(){
     std::cout << "\nMultiplication: " << std::endl;
     std::cout << resultNumber;
     // -5865556229031347952083112353222631447227653248032658997355360056412540804700547998450422790872375150570
+
+    lno::Division(fNumber,sNumber,resultNumber);
+    std::cout << "\nDivision: " << std::endl;
+    std::cout << resultNumber;
+    // -2
 
     return 0;
 }

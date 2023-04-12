@@ -307,6 +307,77 @@ namespace lno{
             _rc.append(std::to_string(_r[i]));
         }
     }
+
+    /** 
+    * _fc first number, _sc second number, _rc result number
+    * !!! The result number is resized inside the function and its content is classified.
+    * !!! The result number is returned.
+    * !!! Division algorithmically uses other functions. Therefore, the processing time can be long.
+
+    * Usage:
+    * firstNumber, secondNumber and resultNumber data types (string)
+    * lno::Division(firstNumber, secondNumber, resultNumber);
+    */
+    void Division(std::string _fc, std::string _sc, std::string& _rc){
+        _rc = "";
+        // Check for negative result
+        bool _negative = false;
+        if((_fc[0] == '-' && _sc[0] != '-') || (_fc[0] != '-' && _sc[0] == '-')){
+            _negative = true;
+        }
+
+        if(_fc[0] == '-')
+            _fc[0] = '0';
+        if(_sc[0] == '-')
+            _sc[0] = '0';
+
+        _removeLeadingZero(_fc);
+        _removeLeadingZero(_sc);
+
+        int _lf = _fc.length(), _ls = _sc.length();
+        int _max = _lf + _ls;
+
+        // Check NOT x/0 and 0/x
+        if(_ls != 0 && _lf != 0){
+            std::string _a = "0", _n = "";
+            int _m = 0;
+            for(int i = 0;i<=_lf;i++){
+                if(i == _lf){
+                    for(int j = 0; j < _m; j++)
+                        _rc += "0";
+                }else{
+                    _m++;
+                    _n += _fc[i];
+                    if(_n.length() >= _ls){
+                        _m = 0;
+                        while(true){
+                            std::string _k = "";
+                            Subtraction(_n,_sc,_k);
+                            if(_k[0] != '-'){
+                                _n = _k;
+                                Addition(_a,"1",_a);
+                                std::string _kp = "";
+                                Subtraction(_n,_sc,_kp);
+                                if(_n.length() < _ls || _kp[0] == '-'){
+                                    _rc += _a;
+                                    _a = "";
+                                    break;
+                                }
+                            }else{
+                                break;
+                            }
+                        }   
+                    }
+                }
+            }
+            if(_negative && _rc.length() != 0)
+                _rc.insert(0,"-");
+            else if(_rc.length() == 0)
+                _rc.insert(0,"0");
+        }else if(_lf == 0){
+            _rc.append("0");
+        }
+    }
 }
 
 #endif /* LARGENUMBEROPERATORS_H */
