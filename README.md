@@ -5,17 +5,19 @@ Division and Mode taking operations. It is easy to use and install
 as it consists of a single header file. 
 
 ## Notes
-Currently it only does addition, subtraction, multiplication and division.
+The modular operation is currently only taken as a by-product of the division operation.
 
 ## Usage
 ```cpp
 #include <iostream>
+
 #include "LargeNumberOperators.h"
 
-int main(){
+int main() {
     std::string fNumber = "4133149813182948192891748311313431974817198961784731";
     std::string sNumber = "1419149194718947191345251418431974858637617198917470";
     std::string resultNumber;
+    std::string resultModular;
 
     lno::Addition(fNumber, sNumber, resultNumber);
     std::cout << "Addition: " << std::endl;
@@ -32,10 +34,13 @@ int main(){
     std::cout << resultNumber;
     // 5865556229031347952083112353222631447227653248032658997355360056412540804700547998450422790872375150570
 
-    lno::Division(fNumber,sNumber,resultNumber);
+    lno::Division(fNumber,sNumber,resultNumber,resultModular);
     std::cout << "\nDivision: " << std::endl;
     std::cout << resultNumber;
     // 2
+    std::cout << "\nModular: " << std::endl;
+    std::cout << resultModular;
+    // 1294851423745053810201245474449482257541964563949791
 
     return 0;
 }
@@ -45,13 +50,11 @@ Usage Negative Numbers
 #include <iostream>
 #include "LargeNumberOperators.h"
 
-int main(){
-    /*
-    ==> It is sufficient to have a "-" sign at the beginning of the number
-    */
+int main() {
     std::string fNumber = "-4133149813182948192891748311313431974817198961784731";
     std::string sNumber = "1419149194718947191345251418431974858637617198917470";
     std::string resultNumber;
+    std::string resultModular;
 
     lno::Addition(fNumber, sNumber, resultNumber);
     std::cout << "Addition: " << std::endl;
@@ -68,10 +71,13 @@ int main(){
     std::cout << resultNumber;
     // -5865556229031347952083112353222631447227653248032658997355360056412540804700547998450422790872375150570
 
-    lno::Division(fNumber,sNumber,resultNumber);
+    lno::Division(fNumber,sNumber,resultNumber,resultModular);
     std::cout << "\nDivision: " << std::endl;
     std::cout << resultNumber;
     // -2
+    std::cout << "\nModular: " << std::endl;
+    std::cout << resultModular;
+    // -1294851423745053810201245474449482257541964563949791
 
     return 0;
 }

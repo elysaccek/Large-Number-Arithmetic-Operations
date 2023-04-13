@@ -6,6 +6,7 @@
 
 namespace lno{
     void _removeLeadingZero(std::string& _in);
+    int _Compare(std::string _fc, std::string _sc);
     void Addition(std::string _fc, std::string _sc, std::string& _rc);
     void Subtraction(std::string _fc, std::string _sc, std::string& _rc);
 
@@ -20,6 +21,33 @@ namespace lno{
                 _new += _in[i+1];
             _in = _new;
             _removeLeadingZero(_in);
+        }
+    }
+
+    /*
+    * if _fc > _sc return 1
+    * if _fc == _sc return -1
+    * if _fc < _sc return 0
+    */
+    int _Compare(std::string _fc, std::string _sc){
+        _removeLeadingZero(_fc);
+        _removeLeadingZero(_sc);
+        int _lf = _fc.length(), _ls = _sc.length();
+
+        if(_lf > _ls){
+            return 1;
+        }
+        else if(_lf == _ls){
+            for(int i = 0; i < _lf; i++){
+                if(_fc[i] > _sc[i]){
+                    return 1;
+                }else if(_fc[i] < _sc[i]){
+                    return 0;
+                }
+            }
+            return -1;
+        }else{
+            return 0;
         }
     }
 
@@ -49,7 +77,7 @@ namespace lno{
             else
                 _max = _ls+1;
 
-            // String => Integer Pointer
+            // String => Integer
             // Resize and Clear
             int _f[_lf],_s[_ls],_r[_max];
 
@@ -61,7 +89,7 @@ namespace lno{
                 _s[i] = int(_sc[i]) - 48;
 
             /*
-            * Integer pointers are used in the operations here.
+            * Integer are used in the operations here.
             */
             int _z = 0, _k = 0, _residual = 0;
             for(int i = _max-1 ;i >= 0 ;i--){
@@ -122,7 +150,7 @@ namespace lno{
 
             int _lf = _fc.length(), _ls = _sc.length(), _max;
             
-            // String => Integer Pointer
+            // String => Integer
             // Resize and Clear
             int _f[_lf], _s[_ls];
 
@@ -206,7 +234,9 @@ namespace lno{
             else if(_fs != 1 && _neg == 1)
                 _rc.append("-");
             for(int i = _remove; i<_max ;i++)
-                _rc.append(std::to_string(_r[i]));               
+                _rc.append(std::to_string(_r[i]));
+            if(_rc == "")
+                _rc.append("0");
         }
         // Addition function
         else{
@@ -250,7 +280,7 @@ namespace lno{
         int _lf = _fc.length(), _ls = _sc.length();
         int _max = _lf + _ls;
 
-        // String => Integer Pointer
+        // String => Integer
         int _f[_lf],_s[_ls],_r[_max];
         for(int i = 0; i <= _max; i++)
             _r[i] = 0;
@@ -270,7 +300,7 @@ namespace lno{
         */
 
         /*
-        * Integer pointers are used in the operations here.
+        * Integer are used in the operations here.
         */
         for(int i = _ls-1 ;i >= 0 ;i--){
             _z = 0;
@@ -309,17 +339,18 @@ namespace lno{
     }
 
     /** 
-    * _fc first number, _sc second number, _rc result number
+    * _fc first number, _sc second number, _rc result number, _mc modular number
     * !!! The result number is resized inside the function and its content is classified.
     * !!! The result number is returned.
     * !!! Division algorithmically uses other functions. Therefore, the processing time can be long.
 
     * Usage:
-    * firstNumber, secondNumber and resultNumber data types (string)
-    * lno::Division(firstNumber, secondNumber, resultNumber);
+    * firstNumber, secondNumber, resultNumber and modularNumber data types (string)
+    * lno::Division(firstNumber, secondNumber, resultNumber, modularNumber);
     */
-    void Division(std::string _fc, std::string _sc, std::string& _rc){
+    void Division(std::string _fc, std::string _sc, std::string& _rc, std::string& _mc){
         _rc = "";
+        _mc = "";
         // Check for negative result
         bool _negative = false;
         if((_fc[0] == '-' && _sc[0] != '-') || (_fc[0] != '-' && _sc[0] == '-')){
@@ -340,40 +371,40 @@ namespace lno{
         // Check NOT x/0 and 0/x
         if(_ls != 0 && _lf != 0){
             std::string _a = "0", _n = "";
-            int _m = 0;
             for(int i = 0;i<=_lf;i++){
                 if(i == _lf){
-                    for(int j = 0; j < _m; j++)
-                        _rc += "0";
+                    _mc = _n;
                 }else{
-                    _m++;
                     _n += _fc[i];
-                    if(_n.length() >= _ls){
-                        _m = 0;
+                    
+                    if(_Compare(_n,_sc) != 0){
                         while(true){
                             std::string _k = "";
                             Subtraction(_n,_sc,_k);
-                            if(_k[0] != '-'){
-                                _n = _k;
-                                Addition(_a,"1",_a);
-                                std::string _kp = "";
-                                Subtraction(_n,_sc,_kp);
-                                if(_n.length() < _ls || _kp[0] == '-'){
-                                    _rc += _a;
-                                    _a = "";
-                                    break;
-                                }
-                            }else{
+                            _n = _k;
+                            Addition(_a,"1",_a);
+                            std::string _kp = "";
+                            Subtraction(_n,_sc,_kp);
+                            if(_Compare(_n,_sc) == 0 || _kp[0] == '-'){
+                                _rc += _a;
+                                _a = "0";
                                 break;
                             }
                         }   
+                    }else{
+                        _rc += "0";
                     }
                 }
             }
+            _removeLeadingZero(_rc);
             if(_negative && _rc.length() != 0)
                 _rc.insert(0,"-");
             else if(_rc.length() == 0)
                 _rc.insert(0,"0");
+            if(_negative && _mc.length() != 0)
+                _mc.insert(0,"-");
+            else if(_mc.length() == 0)
+                _mc.insert(0,"0");
         }else if(_lf == 0){
             _rc.append("0");
         }
